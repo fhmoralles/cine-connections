@@ -55,4 +55,19 @@ public class Person extends PanacheEntityBase {
         updatedAt = Instant.now();
     }
 
+    public static Person fromTmdbCastMember(
+            long tmdbId,
+            String name,
+            String profilePath
+    ) {
+
+        Person person = new Person();
+
+        person.tmdbId = tmdbId;
+        person.name = name;
+        person.profilePath = profilePath;
+
+        return person;
+    }
+
 }

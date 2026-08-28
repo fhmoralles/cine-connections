@@ -1,7 +1,9 @@
 package com.cineconnections.domain.repository;
 
 import com.cineconnections.domain.entity.Person;
+
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.Optional;
@@ -16,4 +18,25 @@ public class PersonRepository
                 .firstResultOptional();
     }
 
+    public Person getOrCreate(
+            Long tmdbId,
+            String name,
+            String profilePath
+    ) {
+
+        return findByTmdbId(tmdbId)
+                .orElseGet(() -> {
+
+                    Person person =
+                            Person.fromTmdbCastMember(
+                                    tmdbId,
+                                    name,
+                                    profilePath
+                            );
+
+                    persist(person);
+
+                    return person;
+                });
+    }
 }
