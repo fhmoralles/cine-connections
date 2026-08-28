@@ -22,6 +22,36 @@ public class CreditRepository
         return find("movie.id", movieId).list();
     }
 
+    public List<Credit> findByMovieIds(List<UUID> movieIds) {
+
+        if (movieIds == null || movieIds.isEmpty()) {
+            return List.of();
+        }
+
+        return find(
+                "movie.id in ?1",
+                movieIds
+        ).list();
+    }
+
+    public List<Credit> findGraphCredits(UUID personId) {
+
+        return getEntityManager()
+                .createQuery("""
+                        select distinct c
+                        from Credit c
+                        join fetch c.person
+                        join fetch c.movie
+                        where c.movie.id in (
+                            select rc.movie.id
+                            from Credit rc
+                            where rc.person.id = :personId
+                        )
+                        """, Credit.class)
+                .setParameter("personId", personId)
+                .getResultList();
+    }
+
     public boolean exists(
             UUID personId,
             UUID movieId,
