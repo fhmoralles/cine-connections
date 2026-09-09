@@ -41,6 +41,38 @@ public class PersonRepository
                 });
     }
 
+    public Person saveOrUpdate(
+            Long tmdbId,
+            String name,
+            String profilePath
+    ) {
+
+        Person person =
+                findByTmdbId(tmdbId)
+                        .orElse(null);
+
+        if (person == null) {
+
+            person = new Person();
+
+            person.tmdbId = tmdbId;
+            person.name = name;
+            person.profilePath = profilePath;
+
+            persist(person);
+
+        } else {
+
+            person.name = name;
+
+            if (profilePath != null) {
+                person.profilePath = profilePath;
+            }
+        }
+
+        return person;
+    }
+
     public List<Person> searchByName(
             String query
     ) {

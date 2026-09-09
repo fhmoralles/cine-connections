@@ -1,4 +1,6 @@
 .search-page {
+  position: relative;
+
   min-height: 100vh;
 
   background: #070b16;
@@ -146,6 +148,26 @@
   object-fit: cover;
 }
 
+.result-info {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.result-name {
+  font-size: 15px;
+
+  font-weight: 600;
+}
+
+.result-status {
+  color: #64748b;
+
+  font-size: 12px;
+}
+
 .content {
   height: calc(100vh - 72px);
 }
@@ -273,6 +295,25 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.tmdb-attribution {
+  position: absolute;
+
+  bottom: 12px;
+  left: 16px;
+
+  z-index: 20;
+
+  color: #64748b;
+
+  font-size: 11px;
+}
+
+.tmdb-attribution a {
+  color: #94a3b8;
+
+  text-decoration: none;
 }
 
 @media (max-width: 768px) {

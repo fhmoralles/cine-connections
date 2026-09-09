@@ -16,7 +16,7 @@
 
       @if (results().length > 0) {
         <div class="search-results">
-          @for (person of results(); track person.id) {
+          @for (person of results(); track person.tmdbId) {
             <button class="search-result" (click)="selectPerson(person)">
               <div class="result-avatar">
                 @if (person.profilePath) {
@@ -31,7 +31,21 @@
                 }
               </div>
 
-              <span>{{ person.name }}</span>
+              <div class="result-info">
+                <span class="result-name">
+                  {{ person.name }}
+                </span>
+
+                @if (person.imported) {
+                  <span class="result-status">
+                    In your network
+                  </span>
+                } @else {
+                  <span class="result-status">
+                    Explore network
+                  </span>
+                }
+              </div>
             </button>
           }
         </div>
@@ -43,7 +57,7 @@
     @if (loading()) {
       <div class="loading">
         <div class="spinner"></div>
-        <span>Building connections...</span>
+        <span>{{ loadingMessage() }}</span>
       </div>
     } @else if (graph()) {
       <app-graph-explorer [graph]="graph()"></app-graph-explorer>
@@ -67,4 +81,16 @@
       </section>
     }
   </main>
+
+  <footer class="tmdb-attribution">
+    <span>
+      Movie and person data provided by
+    </span>
+    <a
+      href="https://www.themoviedb.org/"
+      target="_blank"
+      rel="noopener noreferrer">
+      TMDB
+    </a>
+  </footer>
 </div>

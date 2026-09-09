@@ -4,7 +4,6 @@ import {
   Subject,
   debounceTime,
   distinctUntilChanged,
-  finalize,
   of,
   switchMap,
   takeUntil
@@ -34,6 +33,8 @@ export class SearchComponent implements OnDestroy {
 
   loading = signal(false);
 
+  loadingMessage = signal('Building connections...');
+
   private readonly destroy$ = new Subject<void>();
 
   constructor(
@@ -45,17 +46,23 @@ export class SearchComponent implements OnDestroy {
         debounceTime(300),
         distinctUntilChanged(),
         switchMap(query => {
-          if (query.trim().length < 2) {
+          const value = query.trim();
+
+          if (value.length < 2) {
             this.results.set([]);
-            return of([]);
+            return of(null);
           }
 
-          return this.personApi.search(query);
+          return this.personApi.search(value);
         }),
         takeUntil(this.destroy$)
       )
-      .subscribe(results => {
-        this.results.set(results);
+      .subscribe(response => {
+        if (!response) {
+          return;
+        }
+
+        this.results.set(response.results);
       });
   }
 
@@ -66,14 +73,37 @@ export class SearchComponent implements OnDestroy {
 
     this.searchControl.setValue(person.name, { emitEvent: false });
 
-    this.graphApi
-      .getPersonGraph(person.id)
-      .pipe(finalize(() => this.loading.set(false)))
-      .subscribe({
-        next: graph => {
-          this.graph.set(graph);
-        }
-      });
+    if (person.imported && person.id) {
+      this.loadingMessage.set('Building connections...');
+      this.loadGraph(person.id);
+      return;
+    }
+
+    this.loadingMessage.set('Importing filmography...');
+
+    this.personApi.importPerson(person.tmdbId).subscribe({
+      next: importedPerson => {
+        this.loadingMessage.set('Building connections...');
+        this.loadGraph(importedPerson.id);
+      },
+      error: () => {
+        this.loading.set(false);
+      }
+    });
+  }
+
+  private loadGraph(personId: string): void {
+    this.loadingMessage.set('Building connections...');
+
+    this.graphApi.getPersonGraph(personId, 2).subscribe({
+      next: graph => {
+        this.graph.set(graph);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+      }
+    });
   }
 
   ngOnDestroy(): void {

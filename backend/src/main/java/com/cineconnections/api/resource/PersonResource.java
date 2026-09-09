@@ -1,7 +1,8 @@
 package com.cineconnections.api.resource;
 
-import com.cineconnections.domain.entity.Person;
-import com.cineconnections.domain.repository.PersonRepository;
+import com.cineconnections.api.dto.person.PersonSearchResponse;
+import com.cineconnections.api.dto.person.PersonSearchResult;
+import com.cineconnections.service.PersonSearchService;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -9,49 +10,54 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
-
-import java.util.List;
-import java.util.UUID;
+import jakarta.ws.rs.core.Response;
 
 @Path("/api/persons")
 @Produces(MediaType.APPLICATION_JSON)
 public class PersonResource {
 
     @Inject
-    PersonRepository personRepository;
+    PersonSearchService personSearchService;
 
     @GET
     @Path("/search")
-    public List<PersonResponse> search(
+    public Response search(
             @QueryParam("query") String query
     ) {
 
         if (query == null || query.isBlank()) {
-            return List.of();
+
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(new ErrorResponse(
+                            "Search query is required"
+                    ))
+                    .build();
         }
 
-        return personRepository
-                .searchByName(query)
-                .stream()
-                .map(PersonResponse::from)
-                .toList();
+        var result =
+                personSearchService.search(query.trim());
+
+        return Response.ok(
+                new PersonSearchResponse(
+                        result.results().stream()
+                                .map(person ->
+                                        new PersonSearchResult(
+                                                person.id(),
+                                                person.tmdbId(),
+                                                person.name(),
+                                                person.profilePath(),
+                                                person.imported()
+                                        )
+                                )
+                                .toList(),
+                        result.imported()
+                )
+        ).build();
     }
 
-    public record PersonResponse(
-            UUID id,
-            Long tmdbId,
-            String name,
-            String profilePath
+    public record ErrorResponse(
+            String message
     ) {
-
-        public static PersonResponse from(Person person) {
-
-            return new PersonResponse(
-                    person.id,
-                    person.tmdbId,
-                    person.name,
-                    person.profilePath
-            );
-        }
     }
 }

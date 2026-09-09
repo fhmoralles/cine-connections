@@ -41,6 +41,16 @@ public class MovieExpansionService {
     @Transactional
     public ExpansionResult expandMovie(Movie movie) {
 
+        if (movie.castExpanded) {
+
+            return new ExpansionResult(
+                    movie.id,
+                    movie.title,
+                    0,
+                    0
+            );
+        }
+
         TmdbMovieCreditsResponse response =
                 tmdbClient.getMovieCredits(
                         movie.tmdbId,
@@ -60,6 +70,8 @@ public class MovieExpansionService {
                     response
             );
         }
+
+        movie.castExpanded = true;
 
         return new ExpansionResult(
                 movie.id,

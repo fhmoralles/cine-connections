@@ -64,15 +64,35 @@ public class TmdbImportService {
                         tmdbConfig.language()
                 );
 
-        Person person = personRepository
-                .findByTmdbId(tmdbPerson.id())
-                .orElseGet(Person::new);
+        Person person =
+                personRepository.saveOrUpdate(
+                        tmdbPerson.id(),
+                        tmdbPerson.name(),
+                        tmdbPerson.profilePath()
+                );
 
-        person.tmdbId = tmdbPerson.id();
-        person.name = tmdbPerson.name();
-        person.profilePath = tmdbPerson.profilePath();
+        importMovieCredits(person);
 
-        personRepository.persist(person);
+        return person;
+    }
+
+    @Transactional
+    public Person importPersonByTmdbId(
+            long tmdbId
+    ) {
+
+        TmdbPersonDetails tmdbPerson =
+                tmdbClient.getPerson(
+                        tmdbId,
+                        tmdbConfig.language()
+                );
+
+        Person person =
+                personRepository.saveOrUpdate(
+                        tmdbPerson.id(),
+                        tmdbPerson.name(),
+                        tmdbPerson.profilePath()
+                );
 
         importMovieCredits(person);
 

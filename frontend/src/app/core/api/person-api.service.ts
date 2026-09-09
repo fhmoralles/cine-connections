@@ -3,7 +3,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { PersonSummary } from '../models/person.model';
+import {
+  ImportedPerson,
+  PersonSearchResponse
+} from '../models/person.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +16,18 @@ export class PersonApiService {
 
   constructor(private readonly http: HttpClient) {}
 
-  search(query: string): Observable<PersonSummary[]> {
+  search(query: string): Observable<PersonSearchResponse> {
     const params = new HttpParams().set('query', query);
 
-    return this.http.get<PersonSummary[]>(`${this.baseUrl}/search`, {
+    return this.http.get<PersonSearchResponse>(`${this.baseUrl}/search`, {
       params
     });
+  }
+
+  importPerson(tmdbId: number): Observable<ImportedPerson> {
+    return this.http.post<ImportedPerson>(
+      `${environment.apiUrl}/import/person/${tmdbId}`,
+      {}
+    );
   }
 }

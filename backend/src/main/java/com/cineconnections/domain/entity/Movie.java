@@ -37,6 +37,9 @@ public class Movie extends PanacheEntityBase {
     @Column(name = "poster_path", length = 500)
     public String posterPath;
 
+    @Column(name = "cast_expanded", nullable = false)
+    public boolean castExpanded = false;
+
     @Column(name = "created_at", nullable = false)
     public Instant createdAt;
 
