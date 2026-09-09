@@ -1,0 +1,70 @@
+<div class="search-page">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-cine">Cine</span>
+      <span class="brand-connections">Connections</span>
+    </div>
+
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+
+      <input
+        type="text"
+        [formControl]="searchControl"
+        placeholder="Search actors and actresses"
+      />
+
+      @if (results().length > 0) {
+        <div class="search-results">
+          @for (person of results(); track person.id) {
+            <button class="search-result" (click)="selectPerson(person)">
+              <div class="result-avatar">
+                @if (person.profilePath) {
+                  <img
+                    [src]="
+                      'https://image.tmdb.org/t/p/w185' + person.profilePath
+                    "
+                    [alt]="person.name"
+                  />
+                } @else {
+                  <span>{{ person.name.charAt(0) }}</span>
+                }
+              </div>
+
+              <span>{{ person.name }}</span>
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </header>
+
+  <main class="content">
+    @if (loading()) {
+      <div class="loading">
+        <div class="spinner"></div>
+        <span>Building connections...</span>
+      </div>
+    } @else if (graph()) {
+      <app-graph-explorer [graph]="graph()"></app-graph-explorer>
+    } @else {
+      <section class="empty-state">
+        <div class="network-icon">
+          <div class="node node-1"></div>
+          <div class="node node-2"></div>
+          <div class="node node-3"></div>
+          <div class="connection connection-1"></div>
+          <div class="connection connection-2"></div>
+        </div>
+
+        <h1>Explore Movie Connections</h1>
+
+        <p>
+          Discover how actors, actresses and movies are connected.
+        </p>
+
+        <span class="hint">Search for a person to start exploring.</span>
+      </section>
+    }
+  </main>
+</div>

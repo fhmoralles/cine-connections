@@ -1,0 +1,36 @@
+<div class="graph-layout">
+  <div #graphContainer class="graph-container"></div>
+
+  @if (selectedNode()) {
+    <aside class="details-panel">
+      <button class="close-button" (click)="selectedNode.set(null)">×</button>
+
+      @if (getImageUrl(selectedNode()!.imagePath)) {
+        <img
+          [src]="getImageUrl(selectedNode()!.imagePath)"
+          [alt]="selectedNode()!.label"
+          class="details-image"
+        />
+      } @else {
+        <div class="image-placeholder">
+          {{ selectedNode()!.type === 'PERSON' ? 'Person' : 'Movie' }}
+        </div>
+      }
+
+      <div class="details-content">
+        <span class="details-type">
+          {{ selectedNode()!.type }}
+        </span>
+
+        <h2>
+          {{ selectedNode()!.label }}
+        </h2>
+
+        <div class="details-id">
+          TMDB ID:
+          {{ selectedNode()!.tmdbId }}
+        </div>
+      </div>
+    </aside>
+  }
+</div>

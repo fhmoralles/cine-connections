@@ -6,6 +6,7 @@ import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,5 +39,17 @@ public class PersonRepository
 
                     return person;
                 });
+    }
+
+    public List<Person> searchByName(
+            String query
+    ) {
+
+        return find(
+                "lower(name) like lower(?1)",
+                "%" + query + "%"
+        )
+        .page(0, 20)
+        .list();
     }
 }
