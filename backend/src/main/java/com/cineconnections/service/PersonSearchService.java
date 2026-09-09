@@ -8,13 +8,21 @@ import com.cineconnections.domain.repository.PersonRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jboss.logging.Logger;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 public class PersonSearchService {
+
+    private static final Logger LOG =
+            Logger.getLogger(PersonSearchService.class);
 
     @Inject
     PersonRepository personRepository;
@@ -26,44 +34,101 @@ public class PersonSearchService {
     @Inject
     TmdbConfig tmdbConfig;
 
+    @Transactional
     public SearchResult search(String query) {
 
-        List<Person> localResults =
-                personRepository.searchByName(query);
+        List<SearchPersonResult> localResults =
+                searchLocal(query);
 
-        if (!localResults.isEmpty()) {
+        List<SearchPersonResult> tmdbResults =
+                searchTmdb(query);
 
-            return new SearchResult(
-                    localResults.stream()
-                            .map(person ->
-                                    SearchPersonResult.from(
-                                            person,
-                                            true
-                                    )
-                            )
-                            .toList(),
-                    true
+        return merge(localResults, tmdbResults);
+    }
+
+    private List<SearchPersonResult> searchLocal(String query) {
+
+        return personRepository.searchByName(query)
+                .stream()
+                .map(person ->
+                        SearchPersonResult.from(
+                                person,
+                                true
+                        )
+                )
+                .toList();
+    }
+
+    private List<SearchPersonResult> searchTmdb(String query) {
+
+        try {
+
+            var response =
+                    tmdbClient.searchPerson(
+                            query,
+                            tmdbConfig.language(),
+                            1,
+                            false
+                    );
+
+            List<TmdbPersonSearchResult> tmdbResults =
+                    response.results() != null
+                            ? response.results()
+                            : List.of();
+
+            return tmdbResults.stream()
+                    .map(SearchPersonResult::from)
+                    .toList();
+
+        } catch (Exception exception) {
+
+            LOG.warnf(
+                    exception,
+                    "TMDB person search failed for query '%s'",
+                    query
+            );
+
+            return List.of();
+        }
+    }
+
+    private SearchResult merge(
+            List<SearchPersonResult> localResults,
+            List<SearchPersonResult> tmdbResults
+    ) {
+
+        Map<Long, SearchPersonResult> localByTmdbId =
+                new LinkedHashMap<>();
+
+        for (SearchPersonResult person : localResults) {
+            if (person.tmdbId() != null) {
+                localByTmdbId.put(person.tmdbId(), person);
+            }
+        }
+
+        List<SearchPersonResult> results =
+                new ArrayList<>();
+
+        for (SearchPersonResult tmdbPerson : tmdbResults) {
+
+            SearchPersonResult localPerson =
+                    localByTmdbId.remove(tmdbPerson.tmdbId());
+
+            results.add(
+                    localPerson != null
+                            ? localPerson
+                            : tmdbPerson
             );
         }
 
-        var response =
-                tmdbClient.searchPerson(
-                        query,
-                        tmdbConfig.language(),
-                        1,
-                        false
-                );
+        results.addAll(localByTmdbId.values());
 
-        List<TmdbPersonSearchResult> tmdbResults =
-                response.results() != null
-                        ? response.results()
-                        : List.of();
+        boolean imported = results.stream()
+                .anyMatch(SearchPersonResult::imported);
 
         return new SearchResult(
-                tmdbResults.stream()
-                        .map(SearchPersonResult::from)
-                        .toList(),
-                false
+                results.stream().limit(20).toList(),
+                imported
         );
     }
 

@@ -1,0 +1,75 @@
+<header class="topbar">
+  <a
+    class="brand"
+    routerLink="/"
+    (click)="goHome()">
+    <span class="brand-cine">Cine</span>
+    <span class="brand-connections">Connections</span>
+  </a>
+
+  <div class="search-box">
+    <span class="search-icon">🔍</span>
+
+    <input
+      type="text"
+      [formControl]="searchControl"
+      placeholder="Search people or movies..."
+    />
+
+    @if (results().length > 0) {
+      <div class="search-results">
+        @for (
+          result of results();
+          track result.tmdbId + '-' + result.type
+        ) {
+          <button
+            class="search-result"
+            (click)="selectResult(result)">
+
+            <div
+              class="result-avatar"
+              [class.movie-avatar]="result.type === 'MOVIE'">
+
+              @if (result.imagePath) {
+                <img
+                  [src]="
+                    'https://image.tmdb.org/t/p/w185' + result.imagePath
+                  "
+                  [alt]="result.name"
+                />
+              } @else {
+                <span>
+                  {{
+                    result.type === 'MOVIE'
+                      ? '🎬'
+                      : result.name.charAt(0)
+                  }}
+                </span>
+              }
+            </div>
+
+            <div class="result-info">
+              <span class="result-name">
+                {{ result.name }}
+              </span>
+
+              <span class="result-meta">
+                @if (result.type === 'MOVIE') {
+                  🎬 Movie · {{ result.secondaryInfo }}
+                } @else {
+                  👤 Person
+                }
+              </span>
+            </div>
+
+            @if (!result.imported) {
+              <span class="explore-label">
+                Explore
+              </span>
+            }
+          </button>
+        }
+      </div>
+    }
+  </div>
+</header>

@@ -24,4 +24,16 @@ export class GraphApiService {
       { params }
     );
   }
+
+  getMovieGraph(
+    movieId: string,
+    depth = 1
+  ): Observable<GraphResponse> {
+    const params = new HttpParams().set('depth', depth);
+
+    return this.http.get<GraphResponse>(
+      `${this.baseUrl}/movie/${movieId}`,
+      { params }
+    );
+  }
 }

@@ -51,6 +51,35 @@ public class GraphResource {
         }
     }
 
+    @GET
+    @Path("/movie/{movieId}")
+    public Response getMovieGraph(
+            @PathParam("movieId") UUID movieId,
+            @QueryParam("depth") @DefaultValue("1") int depth
+    ) {
+
+        try {
+
+            GraphResponse graph =
+                    graphService.buildMovieGraph(
+                            movieId,
+                            depth
+                    );
+
+            return Response.ok(graph).build();
+
+        } catch (IllegalArgumentException exception) {
+
+            return Response.status(
+                    Response.Status.NOT_FOUND
+            ).entity(
+                    new ErrorResponse(
+                            exception.getMessage()
+                    )
+            ).build();
+        }
+    }
+
     public record ErrorResponse(
             String message
     ) {

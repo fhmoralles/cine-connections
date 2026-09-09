@@ -1,1 +1,28 @@
-<router-outlet />
+<div class="search-page">
+  <app-header></app-header>
+
+  <main class="content">
+    <div class="route-outlet">
+      <router-outlet />
+    </div>
+
+    @if (pageLoading.loading()) {
+      <div class="loading">
+        <div class="spinner"></div>
+        <span>{{ pageLoading.message() }}</span>
+      </div>
+    }
+  </main>
+
+  <footer class="tmdb-attribution">
+    <span>
+      Movie and person data provided by
+    </span>
+    <a
+      href="https://www.themoviedb.org/"
+      target="_blank"
+      rel="noopener noreferrer">
+      TMDB
+    </a>
+  </footer>
+</div>

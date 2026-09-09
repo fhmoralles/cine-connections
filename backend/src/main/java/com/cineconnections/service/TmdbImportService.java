@@ -3,6 +3,7 @@ package com.cineconnections.service;
 import com.cineconnections.client.tmdb.TmdbClient;
 import com.cineconnections.client.tmdb.dto.TmdbCastCredit;
 import com.cineconnections.client.tmdb.dto.TmdbCrewCredit;
+import com.cineconnections.client.tmdb.dto.TmdbMovieDetails;
 import com.cineconnections.client.tmdb.dto.TmdbPersonDetails;
 import com.cineconnections.client.tmdb.dto.TmdbPersonMovieCreditsResponse;
 import com.cineconnections.client.tmdb.dto.TmdbPersonSearchResult;
@@ -22,6 +23,8 @@ import jakarta.transaction.Transactional;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -97,6 +100,49 @@ public class TmdbImportService {
         importMovieCredits(person);
 
         return person;
+    }
+
+    @Transactional
+    public Movie importMovieByTmdbId(long tmdbId) {
+
+        TmdbMovieDetails details =
+                tmdbClient.getMovie(
+                        tmdbId,
+                        tmdbConfig.language()
+                );
+
+        Movie movie =
+                movieRepository
+                        .findByTmdbId(tmdbId)
+                        .orElse(null);
+
+        if (movie == null) {
+
+            movie = new Movie();
+
+            movie.tmdbId = details.id();
+            movie.title = details.title();
+            movie.posterPath = details.posterPath();
+            movie.releaseDate = parseReleaseDate(details.releaseDate());
+
+            movieRepository.persist(movie);
+
+        } else {
+
+            movie.title = details.title();
+
+            if (details.posterPath() != null) {
+                movie.posterPath = details.posterPath();
+            }
+
+            if (details.releaseDate() != null) {
+                movie.releaseDate = parseReleaseDate(details.releaseDate());
+            }
+        }
+
+        movieExpansionService.expandMovie(movie);
+
+        return movie;
     }
 
     private TmdbPersonSearchResult findBestPerson(String name) {
@@ -251,7 +297,7 @@ public class TmdbImportService {
     private Movie getOrCreateMovie(
             long tmdbId,
             String title,
-            java.time.LocalDate releaseDate,
+            LocalDate releaseDate,
             String posterPath
     ) {
 
@@ -270,5 +316,18 @@ public class TmdbImportService {
 
                     return movie;
                 });
+    }
+
+    private LocalDate parseReleaseDate(String releaseDate) {
+
+        if (releaseDate == null || releaseDate.isBlank()) {
+            return null;
+        }
+
+        try {
+            return LocalDate.parse(releaseDate);
+        } catch (DateTimeParseException exception) {
+            return null;
+        }
     }
 }

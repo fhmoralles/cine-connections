@@ -1,96 +1,19 @@
-<div class="search-page">
-  <header class="topbar">
-    <div class="brand">
-      <span class="brand-cine">Cine</span>
-      <span class="brand-connections">Connections</span>
-    </div>
+<section class="empty-state">
+  <div class="network-icon">
+    <div class="node node-1"></div>
+    <div class="node node-2"></div>
+    <div class="node node-3"></div>
+    <div class="connection connection-1"></div>
+    <div class="connection connection-2"></div>
+  </div>
 
-    <div class="search-box">
-      <span class="search-icon">🔍</span>
+  <h1>Explore Movie Connections</h1>
 
-      <input
-        type="text"
-        [formControl]="searchControl"
-        placeholder="Search actors and actresses"
-      />
+  <p>
+    Discover how people and movies are connected.
+  </p>
 
-      @if (results().length > 0) {
-        <div class="search-results">
-          @for (person of results(); track person.tmdbId) {
-            <button class="search-result" (click)="selectPerson(person)">
-              <div class="result-avatar">
-                @if (person.profilePath) {
-                  <img
-                    [src]="
-                      'https://image.tmdb.org/t/p/w185' + person.profilePath
-                    "
-                    [alt]="person.name"
-                  />
-                } @else {
-                  <span>{{ person.name.charAt(0) }}</span>
-                }
-              </div>
-
-              <div class="result-info">
-                <span class="result-name">
-                  {{ person.name }}
-                </span>
-
-                @if (person.imported) {
-                  <span class="result-status">
-                    In your network
-                  </span>
-                } @else {
-                  <span class="result-status">
-                    Explore network
-                  </span>
-                }
-              </div>
-            </button>
-          }
-        </div>
-      }
-    </div>
-  </header>
-
-  <main class="content">
-    @if (loading()) {
-      <div class="loading">
-        <div class="spinner"></div>
-        <span>{{ loadingMessage() }}</span>
-      </div>
-    } @else if (graph()) {
-      <app-graph-explorer [graph]="graph()"></app-graph-explorer>
-    } @else {
-      <section class="empty-state">
-        <div class="network-icon">
-          <div class="node node-1"></div>
-          <div class="node node-2"></div>
-          <div class="node node-3"></div>
-          <div class="connection connection-1"></div>
-          <div class="connection connection-2"></div>
-        </div>
-
-        <h1>Explore Movie Connections</h1>
-
-        <p>
-          Discover how actors, actresses and movies are connected.
-        </p>
-
-        <span class="hint">Search for a person to start exploring.</span>
-      </section>
-    }
-  </main>
-
-  <footer class="tmdb-attribution">
-    <span>
-      Movie and person data provided by
-    </span>
-    <a
-      href="https://www.themoviedb.org/"
-      target="_blank"
-      rel="noopener noreferrer">
-      TMDB
-    </a>
-  </footer>
-</div>
+  <span class="hint">
+    Search for a person or movie to start exploring.
+  </span>
+</section>

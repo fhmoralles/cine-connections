@@ -1,6 +1,8 @@
 package com.cineconnections.client.tmdb;
 
 import com.cineconnections.client.tmdb.dto.TmdbMovieCreditsResponse;
+import com.cineconnections.client.tmdb.dto.TmdbMovieDetails;
+import com.cineconnections.client.tmdb.dto.TmdbMovieSearchResponse;
 import com.cineconnections.client.tmdb.dto.TmdbPersonDetails;
 import com.cineconnections.client.tmdb.dto.TmdbPersonMovieCreditsResponse;
 import com.cineconnections.client.tmdb.dto.TmdbPersonSearchResponse;
@@ -28,6 +30,15 @@ public interface TmdbClient {
     );
 
     @GET
+    @Path("/search/movie")
+    TmdbMovieSearchResponse searchMovies(
+            @QueryParam("query") String query,
+            @QueryParam("language") String language,
+            @QueryParam("page") int page,
+            @QueryParam("include_adult") boolean includeAdult
+    );
+
+    @GET
     @Path("/person/{personId}")
     TmdbPersonDetails getPerson(
             @PathParam("personId") long personId,
@@ -38,6 +49,13 @@ public interface TmdbClient {
     @Path("/person/{personId}/movie_credits")
     TmdbPersonMovieCreditsResponse getPersonMovieCredits(
             @PathParam("personId") long personId,
+            @QueryParam("language") String language
+    );
+
+    @GET
+    @Path("/movie/{movieId}")
+    TmdbMovieDetails getMovie(
+            @PathParam("movieId") long movieId,
             @QueryParam("language") String language
     );
 

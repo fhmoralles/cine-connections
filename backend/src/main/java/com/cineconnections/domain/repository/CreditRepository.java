@@ -19,7 +19,34 @@ public class CreditRepository
     }
 
     public List<Credit> findByMovieId(UUID movieId) {
-        return find("movie.id", movieId).list();
+        return getEntityManager()
+                .createQuery("""
+                        select distinct c
+                        from Credit c
+                        join fetch c.person
+                        join fetch c.movie
+                        where c.movie.id = :movieId
+                        """, Credit.class)
+                .setParameter("movieId", movieId)
+                .getResultList();
+    }
+
+    public List<Credit> findGraphCreditsByMovieId(UUID movieId) {
+
+        return getEntityManager()
+                .createQuery("""
+                        select distinct c
+                        from Credit c
+                        join fetch c.person
+                        join fetch c.movie
+                        where c.person.id in (
+                            select rc.person.id
+                            from Credit rc
+                            where rc.movie.id = :movieId
+                        )
+                        """, Credit.class)
+                .setParameter("movieId", movieId)
+                .getResultList();
     }
 
     public List<Credit> findByMovieIds(List<UUID> movieIds) {

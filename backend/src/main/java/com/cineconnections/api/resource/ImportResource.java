@@ -1,5 +1,6 @@
 package com.cineconnections.api.resource;
 
+import com.cineconnections.domain.entity.Movie;
 import com.cineconnections.domain.entity.Person;
 import com.cineconnections.service.TmdbImportService;
 
@@ -67,10 +68,49 @@ public class ImportResource {
         }
     }
 
+    @POST
+    @Path("/movie/{tmdbId}")
+    public Response importMovie(
+            @PathParam("tmdbId") long tmdbId
+    ) {
+
+        try {
+
+            Movie movie =
+                    tmdbImportService.importMovieByTmdbId(
+                            tmdbId
+                    );
+
+            return Response.ok(
+                    new ImportedMovieResponse(
+                            movie.id,
+                            movie.tmdbId,
+                            movie.title
+                    )
+            ).build();
+
+        } catch (Exception exception) {
+
+            return Response
+                    .status(Response.Status.BAD_GATEWAY)
+                    .entity(new ErrorResponse(
+                            "Unable to import movie"
+                    ))
+                    .build();
+        }
+    }
+
     public record ImportPersonResponse(
             java.util.UUID id,
             Long tmdbId,
             String name
+    ) {
+    }
+
+    public record ImportedMovieResponse(
+            java.util.UUID id,
+            Long tmdbId,
+            String title
     ) {
     }
 

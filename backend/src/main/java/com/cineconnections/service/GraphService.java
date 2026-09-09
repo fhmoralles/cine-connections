@@ -9,6 +9,7 @@ import com.cineconnections.domain.entity.Credit;
 import com.cineconnections.domain.entity.Movie;
 import com.cineconnections.domain.entity.Person;
 import com.cineconnections.domain.repository.CreditRepository;
+import com.cineconnections.domain.repository.MovieRepository;
 import com.cineconnections.domain.repository.PersonRepository;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,6 +27,9 @@ public class GraphService {
 
     @Inject
     PersonRepository personRepository;
+
+    @Inject
+    MovieRepository movieRepository;
 
     @Inject
     CreditRepository creditRepository;
@@ -60,6 +64,74 @@ public class GraphService {
 
             if (depth <= 1
                     && !credit.person.id.equals(personId)) {
+                continue;
+            }
+
+            Person person = credit.person;
+            Movie movie = credit.movie;
+
+            GraphNode personNode =
+                    toPersonNode(person);
+
+            GraphNode movieNode =
+                    toMovieNode(movie);
+
+            nodes.putIfAbsent(
+                    personNode.id(),
+                    personNode
+            );
+
+            nodes.putIfAbsent(
+                    movieNode.id(),
+                    movieNode
+            );
+
+            GraphEdge edge =
+                    toCreditEdge(credit);
+
+            edges.putIfAbsent(
+                    edge.id(),
+                    edge
+            );
+        }
+
+        return new GraphResponse(
+                rootNode,
+                new ArrayList<>(nodes.values()),
+                new ArrayList<>(edges.values())
+        );
+    }
+
+    @Transactional
+    public GraphResponse buildMovieGraph(UUID movieId, int depth) {
+
+        Movie rootMovie = movieRepository
+                .findByIdOptional(movieId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "Movie not found: " + movieId
+                        )
+                );
+
+        List<Credit> credits = depth <= 1
+                ? creditRepository.findByMovieId(movieId)
+                : creditRepository.findGraphCreditsByMovieId(movieId);
+
+        Map<String, GraphNode> nodes =
+                new LinkedHashMap<>();
+
+        Map<String, GraphEdge> edges =
+                new LinkedHashMap<>();
+
+        GraphNode rootNode =
+                toMovieNode(rootMovie);
+
+        nodes.put(rootNode.id(), rootNode);
+
+        for (Credit credit : credits) {
+
+            if (depth <= 1
+                    && !credit.movie.id.equals(movieId)) {
                 continue;
             }
 
