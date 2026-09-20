@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/person/person-page.component.scss"],
+  "sourcesContent": [":host {\n  display: block;\n\n  height: 100%;\n  min-height: calc(100vh - 96px);\n}\n"],
+  "mappings": ";AAAA;AACE,WAAA;AAEA,UAAA;AACA,cAAA,KAAA,MAAA,EAAA;;",
+  "names": []
+}

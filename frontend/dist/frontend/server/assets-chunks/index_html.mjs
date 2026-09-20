@@ -1,0 +1,410 @@
+export default `<!DOCTYPE html><html lang="en"><head>
+  <meta charset="utf-8">
+  <title>Cine Connections</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css"><style ng-app-id="ng">
+[_nghost-ng-c3090085086] {
+  display: block;
+}
+.search-page[_ngcontent-ng-c3090085086] {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: #070b16;
+  color: white;
+}
+.content[_ngcontent-ng-c3090085086] {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+.route-outlet[_ngcontent-ng-c3090085086] {
+  min-height: 100%;
+}
+.route-outlet[_ngcontent-ng-c3090085086]    > [_ngcontent-ng-c3090085086]:not(router-outlet) {
+  display: block;
+  min-height: 100%;
+}
+.loading[_ngcontent-ng-c3090085086] {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: #070b16;
+  text-align: center;
+}
+.spinner[_ngcontent-ng-c3090085086] {
+  width: 45px;
+  height: 45px;
+  border: 4px solid #1e293b;
+  border-top-color: #818cf8;
+  border-radius: 50%;
+  animation: _ngcontent-ng-c3090085086_spin 1s linear infinite;
+}
+@keyframes _ngcontent-ng-c3090085086_spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.tmdb-attribution[_ngcontent-ng-c3090085086] {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  z-index: 20;
+  color: #64748b;
+  font-size: 11px;
+}
+.tmdb-attribution[_ngcontent-ng-c3090085086]   a[_ngcontent-ng-c3090085086] {
+  color: #94a3b8;
+  text-decoration: none;
+}
+@media (max-width: 768px) {
+  .content[_ngcontent-ng-c3090085086] {
+    min-height: 0;
+  }
+}
+/*# sourceMappingURL=/app.css.map */</style><style ng-app-id="ng">
+[_nghost-ng-c2275218503] {
+  display: block;
+}
+.topbar[_ngcontent-ng-c2275218503] {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: minmax(220px, 1.1fr) minmax(210px, 0.9fr) minmax(280px, 1.4fr) minmax(280px, 1.1fr);
+  align-items: center;
+  gap: 16px;
+  min-height: 88px;
+  padding: 12px 24px;
+  background: rgba(8, 12, 26, 0.96);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+.brand[_ngcontent-ng-c2275218503] {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: inherit;
+  text-decoration: none;
+}
+.brand-mark[_ngcontent-ng-c2275218503] {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+.brand-mark[_ngcontent-ng-c2275218503]   svg[_ngcontent-ng-c2275218503] {
+  width: 100%;
+  height: 100%;
+}
+.brand-copy[_ngcontent-ng-c2275218503] {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.brand-title[_ngcontent-ng-c2275218503] {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  line-height: 1;
+}
+.brand-cine[_ngcontent-ng-c2275218503] {
+  color: white;
+}
+.brand-connections[_ngcontent-ng-c2275218503] {
+  margin-left: 5px;
+  color: #8b80f9;
+}
+.brand-tagline[_ngcontent-ng-c2275218503] {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 500;
+}
+.idea-box[_ngcontent-ng-c2275218503], 
+.donate-box[_ngcontent-ng-c2275218503] {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 58px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  background: rgba(17, 24, 43, 0.9);
+}
+.idea-icon[_ngcontent-ng-c2275218503], 
+.donate-icon[_ngcontent-ng-c2275218503] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(129, 140, 248, 0.12);
+}
+.donate-icon[_ngcontent-ng-c2275218503] {
+  color: #f472b6;
+  font-size: 18px;
+}
+.idea-copy[_ngcontent-ng-c2275218503], 
+.donate-copy[_ngcontent-ng-c2275218503] {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.idea-label[_ngcontent-ng-c2275218503], 
+.donate-title[_ngcontent-ng-c2275218503] {
+  color: #e2e8f0;
+  font-size: 12px;
+  font-weight: 700;
+}
+.idea-text[_ngcontent-ng-c2275218503], 
+.donate-text[_ngcontent-ng-c2275218503] {
+  color: #94a3b8;
+  font-size: 11px;
+  line-height: 1.35;
+}
+.idea-chevron[_ngcontent-ng-c2275218503] {
+  color: #64748b;
+  font-size: 22px;
+  line-height: 1;
+}
+.search-box[_ngcontent-ng-c2275218503] {
+  position: relative;
+  width: 100%;
+}
+.search-box[_ngcontent-ng-c2275218503]   input[_ngcontent-ng-c2275218503] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 16px 12px 42px;
+  border: 1px solid #334155;
+  border-radius: 999px;
+  outline: none;
+  background: #111827;
+  color: white;
+}
+.search-box[_ngcontent-ng-c2275218503]   input[_ngcontent-ng-c2275218503]:focus {
+  border-color: #6366f1;
+}
+.search-icon[_ngcontent-ng-c2275218503] {
+  position: absolute;
+  top: 11px;
+  left: 14px;
+  z-index: 2;
+}
+.search-examples[_ngcontent-ng-c2275218503] {
+  display: block;
+  margin-top: 6px;
+  padding-left: 8px;
+  color: #475569;
+  font-size: 11px;
+}
+.search-results[_ngcontent-ng-c2275218503] {
+  position: absolute;
+  top: calc(100% + 8px);
+  width: 100%;
+  overflow: hidden;
+  background: #111827;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+.search-result[_ngcontent-ng-c2275218503] {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: transparent;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+}
+.search-result[_ngcontent-ng-c2275218503]:hover {
+  background: #1e293b;
+}
+.result-avatar[_ngcontent-ng-c2275218503] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #334155;
+  flex-shrink: 0;
+}
+.movie-avatar[_ngcontent-ng-c2275218503] {
+  border-radius: 6px;
+  width: 32px;
+  height: 48px;
+}
+.result-avatar[_ngcontent-ng-c2275218503]   img[_ngcontent-ng-c2275218503] {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.result-info[_ngcontent-ng-c2275218503] {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  flex: 1;
+}
+.result-name[_ngcontent-ng-c2275218503] {
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+}
+.result-meta[_ngcontent-ng-c2275218503] {
+  color: #64748b;
+  font-size: 12px;
+}
+.explore-label[_ngcontent-ng-c2275218503] {
+  color: #818cf8;
+  font-size: 11px;
+  font-weight: 600;
+}
+.donate-button[_ngcontent-ng-c2275218503] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: #8b7cf8;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.donate-button[_ngcontent-ng-c2275218503]:hover {
+  background: #7c6cf0;
+}
+@media (max-width: 1200px) {
+  .topbar[_ngcontent-ng-c2275218503] {
+    grid-template-columns: 1fr 1.4fr 1fr;
+    grid-template-areas: "brand search donate" "idea search donate";
+  }
+  .brand[_ngcontent-ng-c2275218503] {
+    grid-area: brand;
+  }
+  .idea-box[_ngcontent-ng-c2275218503] {
+    grid-area: idea;
+  }
+  .search-box[_ngcontent-ng-c2275218503] {
+    grid-area: search;
+  }
+  .donate-box[_ngcontent-ng-c2275218503] {
+    grid-area: donate;
+  }
+}
+@media (max-width: 768px) {
+  .topbar[_ngcontent-ng-c2275218503] {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px;
+  }
+  .search-box[_ngcontent-ng-c2275218503], 
+   .idea-box[_ngcontent-ng-c2275218503], 
+   .donate-box[_ngcontent-ng-c2275218503] {
+    width: 100%;
+  }
+}
+/*# sourceMappingURL=/app-header.component.css.map */</style><style ng-app-id="ng">
+[_nghost-ng-c3065540381] {
+  display: block;
+  height: 100%;
+}
+.empty-state[_ngcontent-ng-c3065540381] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+}
+.empty-state[_ngcontent-ng-c3065540381]   h1[_ngcontent-ng-c3065540381] {
+  margin-bottom: 12px;
+  color: white;
+  font-size: 42px;
+}
+.empty-state[_ngcontent-ng-c3065540381]   p[_ngcontent-ng-c3065540381] {
+  max-width: 500px;
+  color: #94a3b8;
+  font-size: 18px;
+}
+.hint[_ngcontent-ng-c3065540381] {
+  margin-top: 24px;
+  color: #6366f1;
+}
+.network-icon[_ngcontent-ng-c3065540381] {
+  position: relative;
+  width: 180px;
+  height: 120px;
+  margin-bottom: 32px;
+}
+.network-icon[_ngcontent-ng-c3065540381]   .node[_ngcontent-ng-c3065540381] {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #818cf8;
+}
+.network-icon[_ngcontent-ng-c3065540381]   .node-1[_ngcontent-ng-c3065540381] {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.network-icon[_ngcontent-ng-c3065540381]   .node-2[_ngcontent-ng-c3065540381] {
+  bottom: 0;
+  left: 20px;
+}
+.network-icon[_ngcontent-ng-c3065540381]   .node-3[_ngcontent-ng-c3065540381] {
+  bottom: 0;
+  right: 20px;
+}
+.network-icon[_ngcontent-ng-c3065540381]   .connection[_ngcontent-ng-c3065540381] {
+  position: absolute;
+  height: 2px;
+  background: #475569;
+}
+.network-icon[_ngcontent-ng-c3065540381]   .connection-1[_ngcontent-ng-c3065540381] {
+  top: 12px;
+  left: 50%;
+  width: 60px;
+  transform: rotate(55deg);
+  transform-origin: left center;
+}
+.network-icon[_ngcontent-ng-c3065540381]   .connection-2[_ngcontent-ng-c3065540381] {
+  top: 12px;
+  left: 50%;
+  width: 60px;
+  transform: rotate(-55deg);
+  transform-origin: left center;
+}
+/*# sourceMappingURL=/search.component.css.map */</style></head>
+<body>
+  <app-root ng-version="21.2.22" _nghost-ng-c3090085086="" ng-server-context="ssg"><div _ngcontent-ng-c3090085086="" class="search-page"><app-header _ngcontent-ng-c3090085086="" _nghost-ng-c2275218503=""><header _ngcontent-ng-c2275218503="" class="topbar"><a _ngcontent-ng-c2275218503="" routerlink="/" class="brand" href="/"><span _ngcontent-ng-c2275218503="" aria-hidden="true" class="brand-mark"><svg _ngcontent-ng-c2275218503="" viewBox="0 0 40 40" fill="none"><circle _ngcontent-ng-c2275218503="" cx="20" cy="8" r="4.2" fill="#7c6cf0"></circle><circle _ngcontent-ng-c2275218503="" cx="8" cy="22" r="4.2" fill="#7c6cf0"></circle><circle _ngcontent-ng-c2275218503="" cx="32" cy="22" r="4.2" fill="#7c6cf0"></circle><circle _ngcontent-ng-c2275218503="" cx="20" cy="32" r="4.2" fill="#7c6cf0"></circle><path _ngcontent-ng-c2275218503="" d="M20 12.2 L20 27.8 M11.8 20.2 L28.2 20.2 M12.2 19.2 L18.2 11.6 M27.8 19.2 L21.8 11.6" stroke="#7c6cf0" stroke-width="1.8" stroke-linecap="round"></path></svg></span><span _ngcontent-ng-c2275218503="" class="brand-copy"><span _ngcontent-ng-c2275218503="" class="brand-title"><span _ngcontent-ng-c2275218503="" class="brand-cine">Cine</span><span _ngcontent-ng-c2275218503="" class="brand-connections">Connections</span></span><span _ngcontent-ng-c2275218503="" class="brand-tagline"> People. Movies. Endless Connections. </span></span></a><aside _ngcontent-ng-c2275218503="" class="idea-box"><span _ngcontent-ng-c2275218503="" aria-hidden="true" class="idea-icon">💡</span><span _ngcontent-ng-c2275218503="" class="idea-copy"><span _ngcontent-ng-c2275218503="" class="idea-label">Did you know?</span><span _ngcontent-ng-c2275218503="" class="idea-text"> Titanic was the most expensive film ever made at the time. </span></span><span _ngcontent-ng-c2275218503="" aria-hidden="true" class="idea-chevron">›</span></aside><div _ngcontent-ng-c2275218503="" class="search-box"><span _ngcontent-ng-c2275218503="" class="search-icon">🔍</span><input _ngcontent-ng-c2275218503="" type="text" placeholder="Search people or movies..." value="" class="ng-untouched ng-pristine ng-valid"><span _ngcontent-ng-c2275218503="" class="search-examples"> Examples: Leonardo DiCaprio, Titanic, Tom Hanks, Inception... </span><!--container--></div><aside _ngcontent-ng-c2275218503="" class="donate-box"><span _ngcontent-ng-c2275218503="" aria-hidden="true" class="donate-icon">♡</span><span _ngcontent-ng-c2275218503="" class="donate-copy"><span _ngcontent-ng-c2275218503="" class="donate-title">Support the project</span><span _ngcontent-ng-c2275218503="" class="donate-text"> Help keep Cine Connections alive and discover more stories. </span></span><a _ngcontent-ng-c2275218503="" target="_blank" rel="noopener noreferrer" class="donate-button" href="https://www.buymeacoffee.com/"> Donate </a></aside></header></app-header><main _ngcontent-ng-c3090085086="" class="content"><div _ngcontent-ng-c3090085086="" class="route-outlet"><router-outlet _ngcontent-ng-c3090085086=""></router-outlet><app-search _nghost-ng-c3065540381=""><section _ngcontent-ng-c3065540381="" class="empty-state"><div _ngcontent-ng-c3065540381="" class="network-icon"><div _ngcontent-ng-c3065540381="" class="node node-1"></div><div _ngcontent-ng-c3065540381="" class="node node-2"></div><div _ngcontent-ng-c3065540381="" class="node node-3"></div><div _ngcontent-ng-c3065540381="" class="connection connection-1"></div><div _ngcontent-ng-c3065540381="" class="connection connection-2"></div></div><h1 _ngcontent-ng-c3065540381="">Explore Movie Connections</h1><p _ngcontent-ng-c3065540381=""> Discover how people and movies are connected. </p><span _ngcontent-ng-c3065540381="" class="hint"> Search for a person or movie to start exploring. </span></section></app-search><!--container--></div><!--container--></main><footer _ngcontent-ng-c3090085086="" class="tmdb-attribution"><span _ngcontent-ng-c3090085086=""> Movie and person data provided by </span><a _ngcontent-ng-c3090085086="" href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer"> TMDB </a></footer></div></app-root>
+<script src="main.js" type="module"></script>
+
+</body></html>`;

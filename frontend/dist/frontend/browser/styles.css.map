@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/styles.scss"],
+  "sourcesContent": ["*,\r\n*::before,\r\n*::after {\r\n  box-sizing: border-box;\r\n}\r\n\r\nhtml,\r\nbody {\r\n  height: 100%;\r\n  margin: 0;\r\n}\r\n\r\nbody {\r\n  background: #070b16;\r\n\r\n  font-family:\r\n    Inter,\r\n    -apple-system,\r\n    BlinkMacSystemFont,\r\n    'Segoe UI',\r\n    Roboto,\r\n    Helvetica,\r\n    Arial,\r\n    sans-serif;\r\n\r\n  color: white;\r\n}\r\n"],
+  "mappings": ";AAAA;AAAA,CAAA;AAAA,CAAA;AAGE,cAAA;;AAGF;AAAA;AAEE,UAAA;AACA,UAAA;;AAGF;AACE,cAAA;AAEA;IACE,KAAA;IAAA,aAAA;IAAA,kBAAA;IAAA,UAAA;IAAA,MAAA;IAAA,SAAA;IAAA,KAAA;IAAA;AASF,SAAA;;",
+  "names": []
+}
