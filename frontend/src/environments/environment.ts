@@ -5,5 +5,6 @@ export const environment = {
 
   tmdbImageUrl: 'https://image.tmdb.org/t/p/w500',
 
-  donateUrl: 'https://www.buymeacoffee.com/fhmoralles'
+  donateUrl:
+    'https://www.paypal.com/donate/?business=fhmoralles%40gmail.com&item_name=Cine%20Connections&currency_code=USD&amount=1'
 };

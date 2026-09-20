@@ -27,6 +27,8 @@
   min-height: 0;
 
   overflow: auto;
+
+  padding-bottom: 36px;
 }
 
 .route-outlet {
@@ -85,6 +87,12 @@
   left: 16px;
 
   z-index: 20;
+
+  padding: 4px 8px;
+
+  border-radius: 8px;
+
+  background: rgba(7, 11, 22, 0.92);
 
   color: #64748b;
 

@@ -34,9 +34,7 @@
               }
             </a>
           } @empty {
-            <p class="empty-row">
-              No other movies of this genre in the database yet.
-            </p>
+            <app-coming-soon-hint class="empty-row" />
           }
         </div>
 
@@ -56,6 +54,8 @@
           <span class="section-icon">✦</span>
           Movie Curiosities
         </h2>
+
+        <app-coming-soon-hint />
       </aside>
 
       <div class="orbit-stage">
@@ -101,6 +101,10 @@
           </div>
         </div>
 
+        @if (orbitActors().length === 0) {
+          <app-coming-soon-hint />
+        }
+
         @if (extraCast().length > 0) {
           <button
             class="show-all"
@@ -132,6 +136,8 @@
           <span class="section-icon">◎</span>
           Actor Interactions
         </h2>
+
+        <app-coming-soon-hint />
       </aside>
     </section>
 
@@ -164,9 +170,7 @@
               }
             </a>
           } @empty {
-            <p class="empty-row">
-              No other movies with these actors in the database yet.
-            </p>
+            <app-coming-soon-hint class="empty-row" />
           }
         </div>
 

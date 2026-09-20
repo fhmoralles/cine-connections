@@ -7,6 +7,7 @@ import { MovieApiService } from '../../core/api/movie-api.service';
 import { MovieCastMember, MoviePage, MovieSummary } from '../../core/models/movie.model';
 import { PageLoadingService } from '../../core/state/page-loading.service';
 import { tmdbImage } from '../../core/utils/tmdb-image';
+import { ComingSoonHintComponent } from '../../shared/coming-soon-hint/coming-soon-hint.component';
 
 interface ActorOrbitItem {
   actor: MovieCastMember;
@@ -18,7 +19,7 @@ interface ActorOrbitItem {
 @Component({
   selector: 'app-movie-page',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ComingSoonHintComponent],
   templateUrl: './movie-page.component.html',
   styleUrl: './movie-page.component.scss'
 })

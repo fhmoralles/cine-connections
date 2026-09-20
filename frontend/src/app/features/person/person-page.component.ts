@@ -7,11 +7,12 @@ import { PersonApiService } from '../../core/api/person-api.service';
 import { PersonPage } from '../../core/models/person.model';
 import { PageLoadingService } from '../../core/state/page-loading.service';
 import { tmdbImage } from '../../core/utils/tmdb-image';
+import { ComingSoonHintComponent } from '../../shared/coming-soon-hint/coming-soon-hint.component';
 
 @Component({
   selector: 'app-person-page',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ComingSoonHintComponent],
   templateUrl: './person-page.component.html',
   styleUrl: './person-page.component.scss'
 })

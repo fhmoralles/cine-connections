@@ -37,9 +37,7 @@
               <span class="poster-title">{{ movie.title }}</span>
             </a>
           } @empty {
-            <p class="empty-row">
-              No movies for this person in the database yet.
-            </p>
+            <app-coming-soon-hint class="empty-row" />
           }
         </div>
 
@@ -59,6 +57,8 @@
           <span class="section-icon">✦</span>
           Movie Curiosities
         </h2>
+
+        <app-coming-soon-hint />
       </aside>
 
       <div class="profile-stage">
@@ -89,6 +89,8 @@
           <span class="section-icon">◎</span>
           Co-actor Interactions
         </h2>
+
+        <app-coming-soon-hint />
       </aside>
     </section>
 
@@ -121,9 +123,7 @@
               <span>{{ sharedLabel(actor.sharedMovieCount) }}</span>
             </a>
           } @empty {
-            <p class="empty-row">
-              No co-actors in the database yet.
-            </p>
+            <app-coming-soon-hint class="empty-row" />
           }
         </div>
 
