@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+import { AnalyticsService } from './core/analytics/analytics.service';
 import { AppHeaderComponent } from './layout/app-header/app-header.component';
 import { PageLoadingService } from './core/state/page-loading.service';
 
@@ -13,4 +14,8 @@ import { PageLoadingService } from './core/state/page-loading.service';
 })
 export class App {
   readonly pageLoading = inject(PageLoadingService);
+
+  constructor() {
+    inject(AnalyticsService).init();
+  }
 }
