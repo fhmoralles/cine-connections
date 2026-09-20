@@ -1,0 +1,1 @@
+call ng build --output-hashing=all --configuration=%1

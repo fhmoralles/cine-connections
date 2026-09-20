@@ -1,0 +1,2 @@
+export default `*,*:before,*:after{box-sizing:border-box}html,body{height:100%;margin:0}body{background:#070b16;font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#fff}
+`;

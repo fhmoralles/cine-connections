@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/features/graph/graph-explorer/graph-explorer.component.scss"],
-  "sourcesContent": [":host {\n  display: block;\n\n  width: 100%;\n  height: 100%;\n}\n\n.graph-layout {\n  position: relative;\n\n  width: 100%;\n  height: 100%;\n  min-height: 700px;\n\n  overflow: hidden;\n\n  background: radial-gradient(circle at top, #18223f, #070b16 70%);\n}\n\n.graph-container {\n  width: 100%;\n  height: 100%;\n  min-height: 700px;\n\n  cursor: pointer;\n}\n"],
-  "mappings": ";AAAA;AACE,WAAA;AAEA,SAAA;AACA,UAAA;;AAGF,CAAA;AACE,YAAA;AAEA,SAAA;AACA,UAAA;AACA,cAAA;AAEA,YAAA;AAEA;IAAA;MAAA,OAAA,GAAA,GAAA;MAAA,OAAA;MAAA,QAAA;;AAGF,CAAA;AACE,SAAA;AACA,UAAA;AACA,cAAA;AAEA,UAAA;;",
-  "names": []
-}
