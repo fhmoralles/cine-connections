@@ -1,9 +1,12 @@
 package com.cineconnections.client.tmdb.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
+import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record TmdbCastCredit(
 
         long id,
@@ -16,7 +19,10 @@ public record TmdbCastCredit(
         @JsonProperty("poster_path")
         String posterPath,
 
-        String character
+        String character,
+
+        @JsonProperty("genre_ids")
+        List<Integer> genreIds
 
 ) {
 }

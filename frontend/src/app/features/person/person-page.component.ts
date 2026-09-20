@@ -1,75 +1,111 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
-import { EMPTY, combineLatest, switchMap } from 'rxjs';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { EMPTY, switchMap } from 'rxjs';
 
-import { GraphApiService } from '../../core/api/graph-api.service';
 import { PersonApiService } from '../../core/api/person-api.service';
-import { GraphResponse } from '../../core/models/graph.model';
+import { PersonPage } from '../../core/models/person.model';
 import { PageLoadingService } from '../../core/state/page-loading.service';
-import { GraphExplorerComponent } from '../graph/graph-explorer/graph-explorer.component';
+import { tmdbImage } from '../../core/utils/tmdb-image';
 
 @Component({
   selector: 'app-person-page',
   standalone: true,
-  imports: [GraphExplorerComponent],
+  imports: [RouterLink],
   templateUrl: './person-page.component.html',
   styleUrl: './person-page.component.scss'
 })
 export class PersonPageComponent {
   private readonly route = inject(ActivatedRoute);
 
-  private readonly graphApi = inject(GraphApiService);
-
   private readonly personApi = inject(PersonApiService);
 
   private readonly pageLoading = inject(PageLoadingService);
 
-  graph = signal<GraphResponse | null>(null);
+  private readonly moviesTrack =
+    viewChild<ElementRef<HTMLDivElement>>('moviesTrack');
+
+  private readonly coActorsTrack =
+    viewChild<ElementRef<HTMLDivElement>>('coActorsTrack');
+
+  page = signal<PersonPage | null>(null);
 
   constructor() {
-    combineLatest([
-      this.route.paramMap,
-      this.route.queryParamMap
-    ])
+    this.route.paramMap
       .pipe(
-        switchMap(([params, query]) => {
+        switchMap(params => {
           const personId = params.get('id');
-          const tmdbId = query.get('tmdbId');
 
-          this.graph.set(null);
+          this.page.set(null);
 
           if (!personId) {
             this.pageLoading.stop();
             return EMPTY;
           }
 
-          if (tmdbId) {
-            this.pageLoading.start('Importing filmography...');
+          this.pageLoading.start('Importing filmography...');
 
-            return this.personApi.importPerson(Number(tmdbId)).pipe(
-              switchMap(person => {
-                this.pageLoading.start('Building connections...');
-                return this.graphApi.getPersonGraph(person.id, 2);
-              })
-            );
-          }
-
-          this.pageLoading.start('Building connections...');
-
-          return this.graphApi.getPersonGraph(personId, 2);
+          return this.personApi.getPersonPage(personId);
         }),
         takeUntilDestroyed()
       )
       .subscribe({
-        next: graph => {
-          this.graph.set(graph);
+        next: page => {
+          this.page.set(page);
           this.pageLoading.stop();
         },
         error: () => {
-          this.graph.set(null);
+          this.page.set(null);
           this.pageLoading.stop();
         }
       });
+  }
+
+  posterUrl(path: string | null | undefined, size: 'w185' | 'w342' | 'w500' = 'w185'): string | null {
+    return tmdbImage(path, size);
+  }
+
+  profileUrl(path: string | null | undefined, size: 'w185' | 'w500' = 'w185'): string | null {
+    return tmdbImage(path, size);
+  }
+
+  backdropStyle(page: PersonPage): string {
+    const backdrop = page.movies.find(movie => movie.backdropPath)?.backdropPath
+      ?? page.movies.find(movie => movie.posterPath)?.posterPath
+      ?? page.person.profilePath;
+
+    const url = tmdbImage(backdrop, 'original');
+
+    if (!url) {
+      return 'none';
+    }
+
+    return `url('${url}')`;
+  }
+
+  initials(name: string): string {
+    return name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(part => part.charAt(0))
+      .join('')
+      .toUpperCase();
+  }
+
+  sharedLabel(count: number): string {
+    return count === 1 ? '1 movie' : `${count} movies`;
+  }
+
+  scrollRow(kind: 'movies' | 'coActors', direction: -1 | 1): void {
+    const track =
+      kind === 'movies'
+        ? this.moviesTrack()?.nativeElement
+        : this.coActorsTrack()?.nativeElement;
+
+    track?.scrollBy({
+      left: direction * 420,
+      behavior: 'smooth'
+    });
   }
 }

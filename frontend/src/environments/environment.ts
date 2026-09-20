@@ -3,5 +3,7 @@ export const environment = {
 
   apiUrl: 'http://localhost:8080/api',
 
-  tmdbImageUrl: 'https://image.tmdb.org/t/p/w500'
+  tmdbImageUrl: 'https://image.tmdb.org/t/p/w500',
+
+  donateUrl: 'https://www.buymeacoffee.com/'
 };

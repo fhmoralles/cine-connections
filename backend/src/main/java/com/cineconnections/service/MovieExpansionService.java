@@ -40,8 +40,13 @@ public class MovieExpansionService {
 
     @Transactional
     public ExpansionResult expandMovie(Movie movie) {
+        return expandMovie(movie, false);
+    }
 
-        if (movie.castExpanded) {
+    @Transactional
+    public ExpansionResult expandMovie(Movie movie, boolean force) {
+
+        if (movie.castExpanded && !force) {
 
             return new ExpansionResult(
                     movie.id,
@@ -122,6 +127,7 @@ public class MovieExpansionService {
             credit.movie = movie;
             credit.creditType = CreditType.CAST;
             credit.characterName = castMember.character();
+            credit.castOrder = castMember.order();
 
             creditRepository.persist(credit);
 

@@ -1,3 +1,140 @@
-@if (graph()) {
-  <app-graph-explorer [graph]="graph()"></app-graph-explorer>
+@if (page(); as personPage) {
+  <article
+    class="person-page"
+    [style.--backdrop]="backdropStyle(personPage)">
+
+    <div class="page-backdrop" aria-hidden="true"></div>
+
+    <section class="row-section">
+      <h2 class="section-title">
+        <span class="section-icon">▦</span>
+        {{ personPage.person.name }}'s Movies
+        <span class="count-badge">{{ personPage.movieCount }}</span>
+      </h2>
+
+      <div class="carousel">
+        <button
+          class="carousel-arrow"
+          type="button"
+          aria-label="Previous movies"
+          (click)="scrollRow('movies', -1)">
+          ‹
+        </button>
+
+        <div class="carousel-track" #moviesTrack>
+          @for (movie of personPage.movies; track movie.id) {
+            <a class="poster-card" [routerLink]="['/movie', movie.id]">
+              <span class="poster-frame">
+                @if (posterUrl(movie.posterPath, 'w185'); as poster) {
+                  <img [src]="poster" [alt]="movie.title" />
+                } @else {
+                  <div class="poster-fallback">🎬</div>
+                }
+                @if (movie.releaseYear) {
+                  <span class="year-badge">{{ movie.releaseYear }}</span>
+                }
+              </span>
+              <span class="poster-title">{{ movie.title }}</span>
+            </a>
+          } @empty {
+            <p class="empty-row">
+              No movies for this person in the database yet.
+            </p>
+          }
+        </div>
+
+        <button
+          class="carousel-arrow"
+          type="button"
+          aria-label="Next movies"
+          (click)="scrollRow('movies', 1)">
+          ›
+        </button>
+      </div>
+    </section>
+
+    <section class="main-grid">
+      <aside class="side-panel">
+        <h2 class="section-title">
+          <span class="section-icon">✦</span>
+          Movie Curiosities
+        </h2>
+      </aside>
+
+      <div class="profile-stage">
+        <div class="profile-photo">
+          @if (profileUrl(personPage.person.profilePath, 'w500'); as photo) {
+            <img [src]="photo" [alt]="personPage.person.name" />
+          } @else {
+            <span>{{ initials(personPage.person.name) }}</span>
+          }
+        </div>
+
+        <h1>{{ personPage.person.name }}</h1>
+
+        <div class="stats">
+          <div class="stat">
+            <strong>{{ personPage.movieCount }}</strong>
+            <span>Movies</span>
+          </div>
+          <div class="stat">
+            <strong>{{ personPage.coActorCount }}</strong>
+            <span>Co-actors</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="side-panel">
+        <h2 class="section-title">
+          <span class="section-icon">◎</span>
+          Co-actor Interactions
+        </h2>
+      </aside>
+    </section>
+
+    <section class="row-section">
+      <h2 class="section-title">
+        <span class="section-icon">◎</span>
+        Frequent Co-actors
+      </h2>
+
+      <div class="carousel">
+        <button
+          class="carousel-arrow"
+          type="button"
+          aria-label="Previous co-actors"
+          (click)="scrollRow('coActors', -1)">
+          ‹
+        </button>
+
+        <div class="carousel-track co-actors-track" #coActorsTrack>
+          @for (actor of personPage.frequentCoActors; track actor.personId) {
+            <a class="co-actor-card" [routerLink]="['/person', actor.personId]">
+              <div class="co-actor-photo">
+                @if (profileUrl(actor.profilePath); as photo) {
+                  <img [src]="photo" [alt]="actor.name" />
+                } @else {
+                  <span>{{ initials(actor.name) }}</span>
+                }
+              </div>
+              <strong>{{ actor.name }}</strong>
+              <span>{{ sharedLabel(actor.sharedMovieCount) }}</span>
+            </a>
+          } @empty {
+            <p class="empty-row">
+              No co-actors in the database yet.
+            </p>
+          }
+        </div>
+
+        <button
+          class="carousel-arrow"
+          type="button"
+          aria-label="Next co-actors"
+          (click)="scrollRow('coActors', 1)">
+          ›
+        </button>
+      </div>
+    </section>
+  </article>
 }

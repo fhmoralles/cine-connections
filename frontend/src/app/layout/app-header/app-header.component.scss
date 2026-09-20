@@ -1,37 +1,84 @@
 :host {
   display: block;
+  width: 100%;
 }
 
 .topbar {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 100;
 
-  display: flex;
+  display: grid;
+
+  grid-template-columns:
+    max-content
+    minmax(220px, 0.9fr)
+    minmax(280px, 1.8fr)
+    minmax(260px, 1.1fr);
 
   align-items: center;
-  justify-content: space-between;
 
-  height: 72px;
+  gap: 16px;
 
-  padding: 0 32px;
+  width: 100%;
 
-  background: rgba(11, 16, 32, 0.95);
+  min-height: 88px;
 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 28px;
+
+  background: rgba(8, 12, 26, 0.96);
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+  backdrop-filter: blur(16px);
 }
 
 .brand {
-  font-size: 24px;
+  display: flex;
 
-  font-weight: 800;
+  align-items: center;
 
-  letter-spacing: -1px;
+  gap: 10px;
+
+  min-width: 0;
 
   color: inherit;
 
   text-decoration: none;
+}
 
-  cursor: pointer;
+.brand-mark {
+  display: flex;
+
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+}
+
+.brand-mark svg {
+  width: 100%;
+  height: 100%;
+}
+
+.brand-copy {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.brand-title {
+  font-size: 20px;
+
+  font-weight: 800;
+
+  letter-spacing: -0.8px;
+
+  line-height: 1;
+
+  white-space: nowrap;
 }
 
 .brand-cine {
@@ -39,15 +86,109 @@
 }
 
 .brand-connections {
-  margin-left: 4px;
+  margin-left: 5px;
 
-  color: #818cf8;
+  color: #8b80f9;
+}
+
+.brand-tagline {
+  color: #64748b;
+
+  font-size: 11px;
+
+  font-weight: 500;
+}
+
+.idea-box,
+.donate-box {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  width: 100%;
+  min-width: 0;
+  min-height: 58px;
+
+  padding: 8px 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 16px;
+
+  background: rgba(17, 24, 43, 0.9);
+}
+
+.idea-icon,
+.donate-icon {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: rgba(129, 140, 248, 0.12);
+}
+
+.donate-icon {
+  color: #f472b6;
+
+  font-size: 18px;
+}
+
+.idea-copy,
+.donate-copy {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+
+  min-width: 0;
+
+  flex: 1;
+}
+
+.idea-label,
+.donate-title {
+  color: #e2e8f0;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.idea-text,
+.donate-text {
+  color: #94a3b8;
+
+  font-size: 11px;
+
+  line-height: 1.35;
+}
+
+.idea-chevron {
+  color: #64748b;
+
+  font-size: 22px;
+
+  line-height: 1;
+
+  flex-shrink: 0;
 }
 
 .search-box {
   position: relative;
 
-  width: 400px;
+  width: 100%;
+  min-width: 0;
 }
 
 .search-box input {
@@ -59,7 +200,7 @@
 
   border: 1px solid #334155;
 
-  border-radius: 10px;
+  border-radius: 999px;
 
   outline: none;
 
@@ -79,6 +220,24 @@
   left: 14px;
 
   z-index: 2;
+}
+
+.search-examples {
+  display: block;
+
+  margin-top: 6px;
+
+  padding-left: 8px;
+
+  overflow: hidden;
+
+  color: #475569;
+
+  font-size: 11px;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
 }
 
 .search-results {
@@ -191,18 +350,109 @@
   font-weight: 600;
 }
 
-@media (max-width: 768px) {
-  .topbar {
-    height: auto;
+.donate-button {
+  display: inline-flex;
 
-    flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  height: 36px;
+
+  padding: 0 18px;
+
+  border-radius: 999px;
+
+  background: #8b7cf8;
+
+  color: white;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  text-decoration: none;
+
+  white-space: nowrap;
+
+  flex-shrink: 0;
+}
+
+.donate-button:hover {
+  background: #7c6cf0;
+}
+
+@media (max-width: 1200px) {
+  .topbar {
+    grid-template-columns:
+      max-content
+      minmax(180px, 0.8fr)
+      minmax(220px, 1.4fr)
+      minmax(220px, 1fr);
 
     gap: 12px;
 
-    padding: 16px;
+    padding: 10px 16px;
+  }
+
+  .brand-tagline {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .topbar {
+    grid-template-columns: max-content 1fr max-content;
+
+    grid-template-areas:
+      'brand search donate'
+      'idea search donate';
+  }
+
+  .brand {
+    grid-area: brand;
+  }
+
+  .idea-box {
+    grid-area: idea;
   }
 
   .search-box {
-    width: 100%;
+    grid-area: search;
+  }
+
+  .donate-box {
+    grid-area: donate;
+  }
+
+  .idea-chevron,
+  .search-examples,
+  .donate-text {
+    display: none;
+  }
+
+  .idea-box,
+  .donate-box {
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    align-items: stretch;
+  }
+
+  .brand,
+  .search-box,
+  .idea-box,
+  .donate-box {
+    flex: 1 1 100%;
+  }
+
+  .donate-box {
+    justify-content: space-between;
   }
 }

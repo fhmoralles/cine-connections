@@ -123,7 +123,9 @@ public class TmdbImportService {
             movie.tmdbId = details.id();
             movie.title = details.title();
             movie.posterPath = details.posterPath();
+            movie.backdropPath = details.backdropPath();
             movie.releaseDate = parseReleaseDate(details.releaseDate());
+            movie.addGenreIds(genreIdsFrom(details));
 
             movieRepository.persist(movie);
 
@@ -135,12 +137,18 @@ public class TmdbImportService {
                 movie.posterPath = details.posterPath();
             }
 
+            if (details.backdropPath() != null) {
+                movie.backdropPath = details.backdropPath();
+            }
+
             if (details.releaseDate() != null) {
                 movie.releaseDate = parseReleaseDate(details.releaseDate());
             }
+
+            movie.addGenreIds(genreIdsFrom(details));
         }
 
-        movieExpansionService.expandMovie(movie);
+        movieExpansionService.expandMovie(movie, true);
 
         return movie;
     }
@@ -213,7 +221,8 @@ public class TmdbImportService {
                 tmdbCredit.id(),
                 tmdbCredit.title(),
                 tmdbCredit.releaseDate(),
-                tmdbCredit.posterPath()
+                tmdbCredit.posterPath(),
+                tmdbCredit.genreIds()
         );
 
         boolean exists = creditRepository.exists(
@@ -250,7 +259,8 @@ public class TmdbImportService {
                 tmdbCredit.id(),
                 tmdbCredit.title(),
                 tmdbCredit.releaseDate(),
-                tmdbCredit.posterPath()
+                tmdbCredit.posterPath(),
+                tmdbCredit.genreIds()
         );
 
         boolean exists = creditRepository.exists(
@@ -298,11 +308,16 @@ public class TmdbImportService {
             long tmdbId,
             String title,
             LocalDate releaseDate,
-            String posterPath
+            String posterPath,
+            List<Integer> genreIds
     ) {
 
         return movieRepository
                 .findByTmdbId(tmdbId)
+                .map(movie -> {
+                    movie.addGenreIds(genreIds);
+                    return movie;
+                })
                 .orElseGet(() -> {
 
                     Movie movie = new Movie();
@@ -311,11 +326,24 @@ public class TmdbImportService {
                     movie.title = title;
                     movie.releaseDate = releaseDate;
                     movie.posterPath = posterPath;
+                    movie.addGenreIds(genreIds);
 
                     movieRepository.persist(movie);
 
                     return movie;
                 });
+    }
+
+    private List<Integer> genreIdsFrom(TmdbMovieDetails details) {
+
+        if (details.genres() == null) {
+            return List.of();
+        }
+
+        return details.genres()
+                .stream()
+                .map(genre -> genre.id())
+                .toList();
     }
 
     private LocalDate parseReleaseDate(String releaseDate) {

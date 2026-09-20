@@ -84,4 +84,56 @@ public class PersonRepository
         .page(0, 20)
         .list();
     }
+
+    @SuppressWarnings("unchecked")
+    public List<Object[]> findFrequentCoActors(
+            UUID personId,
+            int limit
+    ) {
+
+        return getEntityManager()
+                .createNativeQuery("""
+                        select p.id,
+                               p.tmdb_id,
+                               p.name,
+                               p.profile_path,
+                               count(distinct c2.movie_id) as shared
+                        from credit c1
+                        join credit c2
+                            on c2.movie_id = c1.movie_id
+                           and c2.person_id <> c1.person_id
+                        join person p
+                            on p.id = c2.person_id
+                        where c1.person_id = :personId
+                          and p.profile_path is not null
+                          and p.profile_path <> ''
+                        group by p.id, p.tmdb_id, p.name, p.profile_path
+                        order by shared desc, p.name asc
+                        """)
+                .setParameter("personId", personId)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
+    public long countCoActors(UUID personId) {
+
+        Number count = (Number) getEntityManager()
+                .createNativeQuery("""
+                        select count(distinct c2.person_id)
+                        from credit c1
+                        join credit c2
+                            on c2.movie_id = c1.movie_id
+                           and c2.person_id <> c1.person_id
+                        join person p
+                            on p.id = c2.person_id
+                        where c1.person_id = :personId
+                          and p.profile_path is not null
+                          and p.profile_path <> ''
+                        """)
+                .setParameter("personId", personId)
+                .getSingleResult();
+
+        return count == null ? 0 : count.longValue();
+    }
+
 }

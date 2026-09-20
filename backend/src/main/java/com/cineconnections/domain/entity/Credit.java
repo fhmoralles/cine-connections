@@ -47,6 +47,9 @@ public class Credit extends PanacheEntityBase {
     @Column(name = "job")
     public String job;
 
+    @Column(name = "cast_order")
+    public Integer castOrder;
+
     @Column(name = "created_at", nullable = false)
     public Instant createdAt;
 

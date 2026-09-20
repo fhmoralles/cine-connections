@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   ImportedPerson,
+  PersonPage,
   PersonSearchResponse
 } from '../models/person.model';
 
@@ -22,6 +23,10 @@ export class PersonApiService {
     return this.http.get<PersonSearchResponse>(`${this.baseUrl}/search`, {
       params
     });
+  }
+
+  getPersonPage(personId: string): Observable<PersonPage> {
+    return this.http.get<PersonPage>(`${this.baseUrl}/${personId}`);
   }
 
   importPerson(tmdbId: number): Observable<ImportedPerson> {

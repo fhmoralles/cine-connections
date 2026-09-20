@@ -1,3 +1,183 @@
-@if (graph()) {
-  <app-graph-explorer [graph]="graph()"></app-graph-explorer>
+@if (page(); as moviePage) {
+  <article
+    class="movie-page"
+    [style.--backdrop]="backdropStyle(moviePage.movie)">
+
+    <div class="page-backdrop" aria-hidden="true"></div>
+
+    <section class="row-section">
+      <h2 class="section-title">
+        <span class="section-icon">◎</span>
+        More movies like this
+      </h2>
+
+      <div class="carousel">
+        <button
+          class="carousel-arrow"
+          type="button"
+          aria-label="Previous similar movies"
+          (click)="scrollRow('similar', -1)">
+          ‹
+        </button>
+
+        <div class="carousel-track" #similarTrack>
+          @for (movie of moviePage.similarMovies; track movie.id) {
+            <a class="poster-card" [routerLink]="['/movie', movie.id]">
+              @if (posterUrl(movie.posterPath, 'w185'); as poster) {
+                <img [src]="poster" [alt]="movie.title" />
+              } @else {
+                <div class="poster-fallback">🎬</div>
+              }
+              <span class="poster-title">{{ movie.title }}</span>
+              @if (movie.releaseYear) {
+                <span class="poster-year">{{ movie.releaseYear }}</span>
+              }
+            </a>
+          } @empty {
+            <p class="empty-row">
+              No other movies of this genre in the database yet.
+            </p>
+          }
+        </div>
+
+        <button
+          class="carousel-arrow"
+          type="button"
+          aria-label="Next similar movies"
+          (click)="scrollRow('similar', 1)">
+          ›
+        </button>
+      </div>
+    </section>
+
+    <section class="main-grid">
+      <aside class="side-panel">
+        <h2 class="section-title">
+          <span class="section-icon">✦</span>
+          Movie Curiosities
+        </h2>
+      </aside>
+
+      <div class="orbit-stage">
+        <div class="orbit">
+          @for (item of orbitActors(); track item.actor.personId) {
+            <div
+              class="actor-node"
+              [class.left]="item.side === 'left'"
+              [class.right]="item.side === 'right'"
+              [style.--x.px]="item.x"
+              [style.--y.px]="item.y">
+
+              <div class="actor-photo">
+                @if (profileUrl(item.actor.profilePath); as photo) {
+                  <img [src]="photo" [alt]="item.actor.name" />
+                } @else {
+                  <span>{{ initials(item.actor.name) }}</span>
+                }
+              </div>
+
+              <div class="actor-meta">
+                <strong>{{ item.actor.name }}</strong>
+                <span>{{ item.actor.characterName || 'Cast' }}</span>
+                <a
+                  class="profile-link"
+                  [routerLink]="['/person', item.actor.personId]">
+                  View profile
+                </a>
+              </div>
+            </div>
+          }
+
+          <div class="poster-core">
+            @if (posterUrl(moviePage.movie.posterPath, 'w500'); as poster) {
+              <img [src]="poster" [alt]="moviePage.movie.title" />
+            }
+            <div class="poster-overlay">
+              <h1>{{ moviePage.movie.title }}</h1>
+              @if (moviePage.movie.releaseYear) {
+                <p>{{ moviePage.movie.releaseYear }}</p>
+              }
+            </div>
+          </div>
+        </div>
+
+        @if (extraCast().length > 0) {
+          <button
+            class="show-all"
+            type="button"
+            (click)="toggleCast()">
+            {{ showAllCast() ? 'Show main cast' : 'Show all cast' }}
+          </button>
+        }
+
+        @if (showAllCast()) {
+          <div class="all-cast">
+            @for (actor of extraCast(); track actor.personId) {
+              <a class="all-cast-item" [routerLink]="['/person', actor.personId]">
+                <div class="actor-photo small">
+                  @if (profileUrl(actor.profilePath); as photo) {
+                    <img [src]="photo" [alt]="actor.name" />
+                  }
+                </div>
+                <strong>{{ actor.name }}</strong>
+                <span>{{ actor.characterName || 'Cast' }}</span>
+              </a>
+            }
+          </div>
+        }
+      </div>
+
+      <aside class="side-panel">
+        <h2 class="section-title">
+          <span class="section-icon">◎</span>
+          Actor Interactions
+        </h2>
+      </aside>
+    </section>
+
+    <section class="row-section other-movies">
+      <h2 class="section-title">
+        <span class="section-icon">▦</span>
+        Other movies with these actors
+      </h2>
+
+      <div class="carousel" id="other-movies">
+        <button
+          class="carousel-arrow"
+          type="button"
+          aria-label="Previous related movies"
+          (click)="scrollRow('other', -1)">
+          ‹
+        </button>
+
+        <div class="carousel-track" #otherTrack>
+          @for (movie of moviePage.otherMoviesWithCast; track movie.id) {
+            <a class="poster-card" [routerLink]="['/movie', movie.id]">
+              @if (posterUrl(movie.posterPath, 'w185'); as poster) {
+                <img [src]="poster" [alt]="movie.title" />
+              } @else {
+                <div class="poster-fallback">🎬</div>
+              }
+              <span class="poster-title">{{ movie.title }}</span>
+              @if (movie.releaseYear) {
+                <span class="poster-year">{{ movie.releaseYear }}</span>
+              }
+            </a>
+          } @empty {
+            <p class="empty-row">
+              No other movies with these actors in the database yet.
+            </p>
+          }
+        </div>
+
+        <button
+          class="carousel-arrow"
+          type="button"
+          aria-label="Next related movies"
+          (click)="scrollRow('other', 1)">
+          ›
+        </button>
+      </div>
+    </section>
+  </article>
 }

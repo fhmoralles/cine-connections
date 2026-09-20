@@ -18,6 +18,22 @@ public class CreditRepository
         return find("person.id", personId).list();
     }
 
+    public List<Credit> findCastByMovieId(UUID movieId) {
+
+        return getEntityManager()
+                .createQuery("""
+                        select c
+                        from Credit c
+                        join fetch c.person
+                        where c.movie.id = :movieId
+                          and c.creditType = com.cineconnections.domain.enumtype.CreditType.CAST
+                        order by c.castOrder asc nulls last,
+                                 c.createdAt asc
+                        """, Credit.class)
+                .setParameter("movieId", movieId)
+                .getResultList();
+    }
+
     public List<Credit> findByMovieId(UUID movieId) {
         return getEntityManager()
                 .createQuery("""

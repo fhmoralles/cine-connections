@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
+import { MoviePage } from '../models/movie.model';
 
 export interface ImportedMovie {
   id: string;
@@ -16,13 +17,19 @@ export interface ImportedMovie {
   providedIn: 'root'
 })
 export class MovieApiService {
-  private readonly baseUrl = `${environment.apiUrl}/import/movie`;
+  private readonly importUrl = `${environment.apiUrl}/import/movie`;
+
+  private readonly moviesUrl = `${environment.apiUrl}/movies`;
 
   constructor(private readonly http: HttpClient) {}
 
+  getMoviePage(movieId: string): Observable<MoviePage> {
+    return this.http.get<MoviePage>(`${this.moviesUrl}/${movieId}`);
+  }
+
   importMovie(tmdbId: number): Observable<ImportedMovie> {
     return this.http.post<ImportedMovie>(
-      `${this.baseUrl}/${tmdbId}`,
+      `${this.importUrl}/${tmdbId}`,
       {}
     );
   }

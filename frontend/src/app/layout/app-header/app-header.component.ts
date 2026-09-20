@@ -15,6 +15,7 @@ import { PersonApiService } from '../../core/api/person-api.service';
 import { MovieApiService } from '../../core/api/movie-api.service';
 import { PageLoadingService } from '../../core/state/page-loading.service';
 import { SearchResult } from '../../core/models/search.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -24,6 +25,8 @@ import { SearchResult } from '../../core/models/search.model';
   styleUrl: './app-header.component.scss'
 })
 export class AppHeaderComponent implements OnDestroy {
+  readonly donateUrl = environment.donateUrl;
+
   searchControl = new FormControl('', {
     nonNullable: true
   });
@@ -87,9 +90,7 @@ export class AppHeaderComponent implements OnDestroy {
 
   private selectPerson(result: SearchResult): void {
     if (result.imported && result.id) {
-      void this.router.navigate(['/person', result.id], {
-        queryParams: { tmdbId: result.tmdbId }
-      });
+      void this.router.navigate(['/person', result.id]);
       return;
     }
 
