@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
 
-  apiUrl: 'https://cineconnections.com/api',
+  apiUrl: 'https://cine-connections.com/api',
 
   tmdbImageUrl: 'https://image.tmdb.org/t/p/w500',
 
