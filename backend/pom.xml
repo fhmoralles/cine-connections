@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cineconnections</groupId>
     <artifactId>cine-connections</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0.0001</version>
     <packaging>quarkus</packaging>
     <name>Cine Connections</name>
     <description>Cine Connections backend API</description>
