@@ -1,6 +1,8 @@
 export const environment = {
   production: true,
 
+  version: '1.0.0',
+
   apiUrl: '/api',
 
   tmdbImageUrl: 'https://image.tmdb.org/t/p/w500',

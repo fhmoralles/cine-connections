@@ -26,6 +26,7 @@ import { environment } from '../../../environments/environment';
 })
 export class AppHeaderComponent implements OnDestroy {
   readonly donateUrl = environment.donateUrl;
+  readonly appVersion = environment.version;
 
   searchControl = new FormControl('', {
     nonNullable: true
