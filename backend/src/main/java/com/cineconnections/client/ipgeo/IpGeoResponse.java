@@ -12,7 +12,6 @@ public record IpGeoResponse(
         String country,
         @JsonProperty("country_code") String countryCode,
         String continent,
-        String timezone,
         String message
 ) {
 }

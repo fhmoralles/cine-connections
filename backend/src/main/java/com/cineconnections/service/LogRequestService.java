@@ -152,7 +152,7 @@ public class LogRequestService {
 
             return formatOrigin(response);
         } catch (Exception e) {
-            LOG.debugf(e, "Failed to resolve origin for IP %s", ip);
+            LOG.warnf(e, "Failed to resolve origin for IP %s", ip);
             return null;
         }
     }
